@@ -7,31 +7,31 @@ def contain_a(array)
 end 
 
 def first_wa(array)
-  array.find {|word| word.to_s.start_with?("wa")}
+  array.find {|word| word.to_s.start_with?("wa")} # .to_s converts word into string 
 end
 
 def remove_non_strings(array)
-	#array.delete_if {|string| string.class != String}
-	array.grep(String)
+	array.delete_if {|string| string.class != String}    
+	
 end
 
 def count_elements(array)
-  array.group_by(&:itself).map do |key, value|
-     key.merge({:count => value.length})
-  end
+  counts = Hash.new(0)
+  array.collect {|element| counts[element]+=1 }
+    counts.collect do |hash, number|
+      hash[:count] = number
+    end
+  counts.keys
 end
 
 def merge_data(keys, data)
-  keys.each do |object|
-    matchingProperty = object[:first_name]
-    puts object
-    other_object = data[0][matchingProperty]
-    
-    other_object.each do |property, value|
-      object[property] = value
+  keys.each do |name_hash|
+    data.each do |hash|
+      name_hash.merge!(hash[name_hash[:first_name]])
     end
   end
 end
+
 
 def find_cool(cool)
   if cool[1].values[1] == "cool"
@@ -41,18 +41,16 @@ end
 
 
 def organize_schools(schools)
-  array = []
-  schools.values.to_a.each do |value|
-    array << value.values
-  end
-  school_array = array.flatten.uniq.sort
+  by_location = {}
+    schools.each do |school, location_hash|
+      location_hash.each do |symbol, location|
+        if by_location[location] == nil
+          by_location[location] = [school]
+        else
+          by_location[location] << school  #adding items to array
+        end
+      end
+    end
+    by_location
+end 
 
-  h1 = {schools.to_a[0][1].values[0] => [schools.to_a[0][0], schools.to_a[1][0], schools.to_a[4][0]]}
-  h2 = {school_array[0] => [schools.to_a[3][0]]}
-  h3 = {school_array[2] => [schools.to_a[2][0], schools.to_a[5][0]]}
-  h = {}
-  h.merge!(h1)
-  h.merge!(h2)
-  h.merge!(h3)
-  h
-end
