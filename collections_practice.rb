@@ -7,11 +7,7 @@ def contain_a(array)
 end 
 
 def first_wa(array)
-  array.find do |i|
-    if i[0] == "w" && i[1] == "a"
-      return i
-  end
- end
+  array.find {|word| word.to_s.start_with?("wa")}
 end
 
 def remove_non_strings(array)
